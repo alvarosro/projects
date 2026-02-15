@@ -1,0 +1,22 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/webapp.zip'
+    replaceExistingArchive: true
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'Thor-Service-Connection'
+    appName: 'webapp-devops-lab-2026'
+    package: '$(Build.ArtifactStagingDirectory)/webapp.zip'
